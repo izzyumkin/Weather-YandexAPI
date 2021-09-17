@@ -12,6 +12,8 @@
 		C4FEB68826F4A7640003B7D3 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB68726F4A7640003B7D3 /* MainViewController.swift */; };
 		C4FEB68D26F4A7670003B7D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4FEB68C26F4A7670003B7D3 /* Assets.xcassets */; };
 		C4FEB69F26F4AA580003B7D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4FEB69E26F4AA580003B7D3 /* LaunchScreen.storyboard */; };
+		C4FEB6A126F4AB860003B7D3 /* MainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB6A026F4AB860003B7D3 /* MainTableViewCell.swift */; };
+		C4FEB6A426F4AF070003B7D3 /* Extension + UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB6A326F4AF070003B7D3 /* Extension + UIFont.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		C4FEB68C26F4A7670003B7D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C4FEB69126F4A7670003B7D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C4FEB69E26F4AA580003B7D3 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C4FEB6A026F4AB860003B7D3 /* MainTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewCell.swift; sourceTree = "<group>"; };
+		C4FEB6A326F4AF070003B7D3 /* Extension + UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extension + UIFont.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +62,7 @@
 				C4FEB69726F4A7750003B7D3 /* Model */,
 				C4FEB69826F4A77B0003B7D3 /* View */,
 				C4FEB69926F4A78B0003B7D3 /* Controller */,
+				C4FEB6A226F4AEB30003B7D3 /* Healpers */,
 				C4FEB69A26F4A7B60003B7D3 /* Resources */,
 				C4FEB69B26F4A7DE0003B7D3 /* Supporting Files */,
 			);
@@ -74,6 +79,7 @@
 		C4FEB69826F4A77B0003B7D3 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C4FEB6A026F4AB860003B7D3 /* MainTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -110,6 +116,14 @@
 				C4FEB68526F4A7640003B7D3 /* SceneDelegate.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		C4FEB6A226F4AEB30003B7D3 /* Healpers */ = {
+			isa = PBXGroup;
+			children = (
+				C4FEB6A326F4AF070003B7D3 /* Extension + UIFont.swift */,
+			);
+			path = Healpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -181,8 +195,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4FEB6A426F4AF070003B7D3 /* Extension + UIFont.swift in Sources */,
 				C4FEB68826F4A7640003B7D3 /* MainViewController.swift in Sources */,
 				C4FEB68426F4A7640003B7D3 /* AppDelegate.swift in Sources */,
+				C4FEB6A126F4AB860003B7D3 /* MainTableViewCell.swift in Sources */,
 				C4FEB68626F4A7640003B7D3 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
