@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		360342508C6B5D79B0CC6B4C /* Pods_Weather_YandexAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1F325617EB5195570577D2D /* Pods_Weather_YandexAPI.framework */; };
 		C4FEB68426F4A7640003B7D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB68326F4A7640003B7D3 /* AppDelegate.swift */; };
 		C4FEB68626F4A7640003B7D3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB68526F4A7640003B7D3 /* SceneDelegate.swift */; };
 		C4FEB68826F4A7640003B7D3 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB68726F4A7640003B7D3 /* MainViewController.swift */; };
@@ -14,9 +15,14 @@
 		C4FEB69F26F4AA580003B7D3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C4FEB69E26F4AA580003B7D3 /* LaunchScreen.storyboard */; };
 		C4FEB6A126F4AB860003B7D3 /* MainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB6A026F4AB860003B7D3 /* MainTableViewCell.swift */; };
 		C4FEB6A426F4AF070003B7D3 /* Extension + UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB6A326F4AF070003B7D3 /* Extension + UIFont.swift */; };
+		C4FEB6A626F4BB150003B7D3 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB6A526F4BB150003B7D3 /* Weather.swift */; };
+		C4FEB6A826F4BD2C0003B7D3 /* Cities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB6A726F4BD2C0003B7D3 /* Cities.swift */; };
+		C4FEB6AB26F4BE250003B7D3 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB6AA26F4BE250003B7D3 /* NetworkService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		993655F9786D3E5AA78FA631 /* Pods-Weather-YandexAPI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Weather-YandexAPI.release.xcconfig"; path = "Target Support Files/Pods-Weather-YandexAPI/Pods-Weather-YandexAPI.release.xcconfig"; sourceTree = "<group>"; };
+		A1F325617EB5195570577D2D /* Pods_Weather_YandexAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Weather_YandexAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4FEB68026F4A7640003B7D3 /* Weather-YandexAPI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Weather-YandexAPI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4FEB68326F4A7640003B7D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4FEB68526F4A7640003B7D3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -26,6 +32,10 @@
 		C4FEB69E26F4AA580003B7D3 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C4FEB6A026F4AB860003B7D3 /* MainTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewCell.swift; sourceTree = "<group>"; };
 		C4FEB6A326F4AF070003B7D3 /* Extension + UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extension + UIFont.swift"; sourceTree = "<group>"; };
+		C4FEB6A526F4BB150003B7D3 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
+		C4FEB6A726F4BD2C0003B7D3 /* Cities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cities.swift; sourceTree = "<group>"; };
+		C4FEB6AA26F4BE250003B7D3 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		CC94B2ED388768FCC68C0577 /* Pods-Weather-YandexAPI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Weather-YandexAPI.debug.xcconfig"; path = "Target Support Files/Pods-Weather-YandexAPI/Pods-Weather-YandexAPI.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				360342508C6B5D79B0CC6B4C /* Pods_Weather_YandexAPI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +55,8 @@
 			children = (
 				C4FEB68226F4A7640003B7D3 /* Weather-YandexAPI */,
 				C4FEB68126F4A7640003B7D3 /* Products */,
+				F7D82587766DB41933CBB2B6 /* Pods */,
+				D4668B074F41A1D31E0223B7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,6 +75,7 @@
 				C4FEB69726F4A7750003B7D3 /* Model */,
 				C4FEB69826F4A77B0003B7D3 /* View */,
 				C4FEB69926F4A78B0003B7D3 /* Controller */,
+				C4FEB6A926F4BE180003B7D3 /* NetworkService */,
 				C4FEB6A226F4AEB30003B7D3 /* Healpers */,
 				C4FEB69A26F4A7B60003B7D3 /* Resources */,
 				C4FEB69B26F4A7DE0003B7D3 /* Supporting Files */,
@@ -72,6 +86,8 @@
 		C4FEB69726F4A7750003B7D3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				C4FEB6A526F4BB150003B7D3 /* Weather.swift */,
+				C4FEB6A726F4BD2C0003B7D3 /* Cities.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -126,6 +142,32 @@
 			path = Healpers;
 			sourceTree = "<group>";
 		};
+		C4FEB6A926F4BE180003B7D3 /* NetworkService */ = {
+			isa = PBXGroup;
+			children = (
+				C4FEB6AA26F4BE250003B7D3 /* NetworkService.swift */,
+			);
+			path = NetworkService;
+			sourceTree = "<group>";
+		};
+		D4668B074F41A1D31E0223B7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A1F325617EB5195570577D2D /* Pods_Weather_YandexAPI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F7D82587766DB41933CBB2B6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CC94B2ED388768FCC68C0577 /* Pods-Weather-YandexAPI.debug.xcconfig */,
+				993655F9786D3E5AA78FA631 /* Pods-Weather-YandexAPI.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -133,9 +175,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C4FEB69426F4A7670003B7D3 /* Build configuration list for PBXNativeTarget "Weather-YandexAPI" */;
 			buildPhases = (
+				1157D74CCAD29EA3D346B54E /* [CP] Check Pods Manifest.lock */,
 				C4FEB67C26F4A7640003B7D3 /* Sources */,
 				C4FEB67D26F4A7640003B7D3 /* Frameworks */,
 				C4FEB67E26F4A7640003B7D3 /* Resources */,
+				D3AF3509A00D8EFD4A67072B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -190,6 +234,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1157D74CCAD29EA3D346B54E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Weather-YandexAPI-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D3AF3509A00D8EFD4A67072B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Weather-YandexAPI/Pods-Weather-YandexAPI-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Weather-YandexAPI/Pods-Weather-YandexAPI-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Weather-YandexAPI/Pods-Weather-YandexAPI-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C4FEB67C26F4A7640003B7D3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -197,8 +283,11 @@
 			files = (
 				C4FEB6A426F4AF070003B7D3 /* Extension + UIFont.swift in Sources */,
 				C4FEB68826F4A7640003B7D3 /* MainViewController.swift in Sources */,
+				C4FEB6AB26F4BE250003B7D3 /* NetworkService.swift in Sources */,
 				C4FEB68426F4A7640003B7D3 /* AppDelegate.swift in Sources */,
 				C4FEB6A126F4AB860003B7D3 /* MainTableViewCell.swift in Sources */,
+				C4FEB6A826F4BD2C0003B7D3 /* Cities.swift in Sources */,
+				C4FEB6A626F4BB150003B7D3 /* Weather.swift in Sources */,
 				C4FEB68626F4A7640003B7D3 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,6 +413,7 @@
 		};
 		C4FEB69526F4A7670003B7D3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CC94B2ED388768FCC68C0577 /* Pods-Weather-YandexAPI.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -344,6 +434,7 @@
 		};
 		C4FEB69626F4A7670003B7D3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 993655F9786D3E5AA78FA631 /* Pods-Weather-YandexAPI.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

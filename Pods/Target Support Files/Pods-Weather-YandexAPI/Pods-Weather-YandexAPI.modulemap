@@ -1,0 +1,6 @@
+framework module Pods_Weather_YandexAPI {
+  umbrella header "Pods-Weather-YandexAPI-umbrella.h"
+
+  export *
+  module * { export * }
+}
