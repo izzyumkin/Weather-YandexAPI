@@ -14,6 +14,7 @@ protocol NetworkService {
 
 struct NetworkServiceImpl: NetworkService {
     
+    // Константы
     private let scheme = "https"
     private let host = "api.weather.yandex.ru"
     private let path = "/v2/forecast"
@@ -22,9 +23,10 @@ struct NetworkServiceImpl: NetworkService {
     
     private let sharedSession = URLSession.shared
     
+    // Обработка запроса
     func getWeather(for city: String, completion: @escaping (Weather?) -> Void) {
         guard let request = getWeatherRequest(for: city) else {
-            // Если город не найден, то дальше не пойдет.
+            // Если город не найден, выходим из метода
             return
         }
         switch request {
@@ -38,17 +40,14 @@ struct NetworkServiceImpl: NetworkService {
                     print(error.localizedDescription)
                     return
                 }
-                
                 if let httpResponse = response as? HTTPURLResponse {
                     print("http status code: \(httpResponse.statusCode)")
                 }
-                
                 guard let data = data else {
                     completion(nil)
                     print("no data received")
                     return
                 }
-                
                 let decoder = JSONDecoder()
                 if let weather = try? decoder.decode(Weather.self, from: data) {
                     completion(weather)
@@ -58,6 +57,7 @@ struct NetworkServiceImpl: NetworkService {
         }
     }
     
+    // Создаем тело запроса
     private func getWeatherRequest(for city: String) -> Result<URLRequest, CLError>? {
         var locationCoordinate: Result<CLLocationCoordinate2D, CLError>?
         let group = DispatchGroup()
@@ -97,6 +97,7 @@ struct NetworkServiceImpl: NetworkService {
         }
     }
     
+    // Получаем коордианты города
     private func getCoordinatesOfCity(_ city: String, completion: @escaping (Result<CLLocationCoordinate2D, CLError>) -> Void) {
         CLGeocoder().geocodeAddressString(city) { (placemarks, error) in
             if let coordinates = placemarks?.first?.location?.coordinate {

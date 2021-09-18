@@ -35,6 +35,9 @@ struct Fact: Codable {
 }
 
 struct Forecast: Codable {
+    let date: String
+    let sunrise: String
+    let sunset: String
     let parts: Parts
 }
 
@@ -47,11 +50,13 @@ struct Day: Codable {
     let tempMin: Int
     let tempMax: Int
     let condition: String
+    let icon: String
     
     private enum CodingKeys: String, CodingKey {
         case tempMin = "temp_min"
         case tempMax = "temp_max"
         case condition
+        case icon
     }
 }
 
@@ -66,4 +71,3 @@ struct Evening: Codable {
         case condition
     }
 }
-

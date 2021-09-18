@@ -22,8 +22,11 @@ final class CitiesImpl: Cities {
     
     static var shared: Cities = CitiesImpl()
     
+    // Список городов
     var list: [String] { return arrayOfCities }
+    // Словарь Город:Погода
     var listWithWeather: [String: Weather] { return  dictionaryOfCitiesWithWeather }
+    // Кол-во городов
     var count: Int { return arrayOfCities.count }
     
     private var arrayOfCities: [String] = [
@@ -39,30 +42,31 @@ final class CitiesImpl: Cities {
         "Самара"
     ]
     
+    // Словарь с погодой по ключу "Город"
     private var dictionaryOfCitiesWithWeather: [String: Weather] = [:]
     
     private init() {}
     
+    // Добавление нового города
     func add(city: String) {
         arrayOfCities.append(city.capitalized)
     }
     
-    
+    // Удаление города
     func removeCity(at index: Int) {
         arrayOfCities.remove(at: index)
     }
     
+    // Сохранение погоды для города
     func addWeatherFor(city: String, weather: Weather) {
         dictionaryOfCitiesWithWeather[city.capitalized] = weather
     }
     
 }
 
-// Защита от случайного клонирования
 extension CitiesImpl: NSCopying {
-    
+    // Защита от случайного копирования
     func copy(with zone: NSZone? = nil) -> Any {
         return self
     }
-    
 }

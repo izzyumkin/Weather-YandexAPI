@@ -9,41 +9,47 @@ import UIKit
 
 class MainViewController: UIViewController {
     
-    var cities = CitiesImpl.shared
-    var tableView = UITableView(frame: CGRect.zero, style: .insetGrouped)
-    
+    // UI
+    private var tableView = UITableView(frame: CGRect.zero, style: .plain)
     private lazy var searchController = UISearchController(searchResultsController: nil)
+    private let detailVC = DetailViewController()
+    
+    // Data
+    private var cities = CitiesImpl.shared
+    private let networkService: NetworkService = NetworkServiceImpl()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Погода"
         view.backgroundColor = .systemGroupedBackground
-        
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            self?.updateUI()
-        }
-        
+        reloadData(qos: .userInteractive)
         view.addSubview(tableView)
-        
         configureTableView()
         configureSearchBar()
         setTableViewConstraints()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reloadData(qos: .background)
+    }
+    
+    // MARK: UI
 
-    func configureTableView() {
+    private func configureTableView() {
         tableView.register(MainTableViewCell.self, forCellReuseIdentifier: MainTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
     }
     
-    func configureSearchBar() {
+    private func configureSearchBar() {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "Найти"
     }
     
-    func setTableViewConstraints() {
+    private func setTableViewConstraints() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -52,24 +58,97 @@ class MainViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+
+    // Обновить все города с настраиваемым приоритетом для очереди
+    private func reloadData(qos: DispatchQoS.QoSClass) {
+        DispatchQueue.global(qos: qos).async { [weak self] in
+            guard let self = self else { return }
+            self.updateAllCities()
+        }
+    }
     
-    func updateUI() {
-        let networkService: NetworkService = NetworkServiceImpl()
+    // Обновить все города
+    private func updateAllCities() {
         cities.list.forEach { [weak self] city in
             guard let self = self else { return }
             networkService.getWeather(for: city) { weather in
                 if let weather = weather {
                     self.cities.addWeatherFor(city: city, weather: weather)
                     DispatchQueue.main.async { [weak self] in
-                        self?.tableView.reloadData()
+                        guard let self = self else { return }
+                        self.tableView.reloadData()
                     }
                 }
+            }
+        }
+    }
+    
+    // Обновить добавленный город
+    private func updateNewCity() {
+        if let city = cities.list.last {
+            networkService.getWeather(for: city) { weather in
+                if let weather = weather {
+                    self.cities.addWeatherFor(city: city, weather: weather)
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.tableView.reloadData()
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: Actions
+    
+    // Показать погоду для поискового запроса
+    private func showDetailWeatherFor(city: String) {
+        networkService.getWeather(for: city) { [detailVC, searchController] weather in
+            if let weather = weather {
+                // Город найден, показываем DetailVC
+                detailVC.city = city
+                detailVC.weather = weather
+                DispatchQueue.main.async {
+                    let navigationVC = UINavigationController(rootViewController: detailVC)
+                    let cancelButton = UIBarButtonItem(title: "Отмена", style: .plain, target: self, action: #selector(self.hideDetailVC))
+                    let addButton = UIBarButtonItem(title: "Добавить", style: .done, target: self, action: #selector(self.addSearchedCity))
+                    detailVC.navigationItem.leftBarButtonItem = cancelButton
+                    detailVC.navigationItem.rightBarButtonItem = addButton
+                    
+                    searchController.searchBar.isLoading = false
+                    self.present(navigationVC, animated: true, completion: nil)
+                }
+            } else {
+                // Город не найден
+                DispatchQueue.main.async {
+                    searchController.searchBar.isLoading = false
+                    UIAlertController.showUknownLocation()
+                }
+            }
+        }
+        
+    }
+    
+    // Закрыть DetailVC
+    @objc private func hideDetailVC() {
+        detailVC.dismiss(animated: true, completion: nil)
+    }
+    
+    // Добавить новый город и обновить таблицу
+    @objc private func addSearchedCity() {
+        if let searchedCity = searchController.searchBar.text?.capitalized {
+            searchController.isActive = false
+            detailVC.dismiss(animated: true, completion: nil)
+            cities.add(city: searchedCity)
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                guard let self = self else { return }
+                self.updateNewCity()
             }
         }
     }
 
 }
 
+// MARK: UITableViewDelegate, UITableViewDataSource
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -94,18 +173,44 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let vc = DetailViewController()
+        let city = cities.list[indexPath.row]
+        vc.city = city
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Удалить") { _, _, complete in
+            self.cities.removeCity(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            complete(true)
+        }
+
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        configuration.performsFirstActionWithFullSwipe = true
+        return configuration
     }
     
 }
 
+// MARK: UISearchBarDelegate
 extension MainViewController: UISearchBarDelegate {
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if let city = searchBar.text?.capitalized, !city.isEmpty {
-            print(city)
-//            showDetailWeatherFor(city: city)
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.isLoading {
+            searchBar.isLoading = !searchBar.isLoading
         }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.isLoading = true
         searchBar.resignFirstResponder()
+        if let city = searchBar.text?.capitalized, !city.isEmpty {
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                guard let self = self else { return }
+                self.showDetailWeatherFor(city: city)
+            }
+        }
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -114,8 +219,15 @@ extension MainViewController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = nil
+        searchBar.isLoading = false
         searchBar.resignFirstResponder()
         searchBar.showsCancelButton = false
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        if searchBar.text == "" {
+            searchBar.isLoading = false
+        }
     }
     
 }
