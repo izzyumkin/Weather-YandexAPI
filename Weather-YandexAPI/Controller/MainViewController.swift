@@ -17,7 +17,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Погода"
-        view.backgroundColor = .secondarySystemGroupedBackground
+        view.backgroundColor = .systemGroupedBackground
         
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             self?.updateUI()
@@ -46,9 +46,9 @@ class MainViewController: UIViewController {
     func setTableViewConstraints() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
@@ -57,15 +57,12 @@ class MainViewController: UIViewController {
         let networkService: NetworkService = NetworkServiceImpl()
         cities.list.forEach { [weak self] city in
             guard let self = self else { return }
-            networkService.getWeather(for: city) { result in
-                switch result {
-                case .success(let weather):
+            networkService.getWeather(for: city) { weather in
+                if let weather = weather {
                     self.cities.addWeatherFor(city: city, weather: weather)
                     DispatchQueue.main.async { [weak self] in
                         self?.tableView.reloadData()
                     }
-                case .failure(let error):
-                    print(type(of: self), #function, error.localizedDescription)
                 }
             }
         }
@@ -104,7 +101,10 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 extension MainViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("Tap for search")
+        if let city = searchBar.text?.capitalized, !city.isEmpty {
+            print(city)
+//            showDetailWeatherFor(city: city)
+        }
         searchBar.resignFirstResponder()
     }
     

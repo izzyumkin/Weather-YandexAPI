@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,6 +18,7 @@
 		C4FEB6A626F4BB150003B7D3 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB6A526F4BB150003B7D3 /* Weather.swift */; };
 		C4FEB6A826F4BD2C0003B7D3 /* Cities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB6A726F4BD2C0003B7D3 /* Cities.swift */; };
 		C4FEB6AB26F4BE250003B7D3 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB6AA26F4BE250003B7D3 /* NetworkService.swift */; };
+		C4FEB6AD26F5A04E0003B7D3 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FEB6AC26F5A04E0003B7D3 /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		C4FEB6A526F4BB150003B7D3 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		C4FEB6A726F4BD2C0003B7D3 /* Cities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cities.swift; sourceTree = "<group>"; };
 		C4FEB6AA26F4BE250003B7D3 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		C4FEB6AC26F5A04E0003B7D3 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		CC94B2ED388768FCC68C0577 /* Pods-Weather-YandexAPI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Weather-YandexAPI.debug.xcconfig"; path = "Target Support Files/Pods-Weather-YandexAPI/Pods-Weather-YandexAPI.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				C4FEB68726F4A7640003B7D3 /* MainViewController.swift */,
+				C4FEB6AC26F5A04E0003B7D3 /* DetailViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -164,7 +167,6 @@
 				CC94B2ED388768FCC68C0577 /* Pods-Weather-YandexAPI.debug.xcconfig */,
 				993655F9786D3E5AA78FA631 /* Pods-Weather-YandexAPI.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -281,6 +283,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4FEB6AD26F5A04E0003B7D3 /* DetailViewController.swift in Sources */,
 				C4FEB6A426F4AF070003B7D3 /* Extension + UIFont.swift in Sources */,
 				C4FEB68826F4A7640003B7D3 /* MainViewController.swift in Sources */,
 				C4FEB6AB26F4BE250003B7D3 /* NetworkService.swift in Sources */,

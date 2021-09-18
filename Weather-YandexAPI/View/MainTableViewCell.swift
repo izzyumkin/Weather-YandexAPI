@@ -83,8 +83,7 @@ class MainTableViewCell: UITableViewCell {
         conditionLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             conditionLabel.trailingAnchor.constraint(equalTo: tempLabel.leadingAnchor, constant: -10),
-            conditionLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            conditionLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 80)
+            conditionLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
     
@@ -93,7 +92,7 @@ class MainTableViewCell: UITableViewCell {
         NSLayoutConstraint.activate([
             tempLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             tempLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            tempLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 75)
+            tempLabel.widthAnchor.constraint(equalToConstant: 91)
         ])
     }
     
@@ -159,6 +158,5 @@ class MainTableViewCell: UITableViewCell {
             return ""
         }
     }
-
     
 }

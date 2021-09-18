@@ -9,7 +9,7 @@ import Foundation
 import CoreLocation
 
 protocol NetworkService {
-    func getWeather(for city: String, completion: @escaping (Result<Weather, Error>) -> Void)
+    func getWeather(for city: String, completion: @escaping (Weather?) -> Void)
 }
 
 struct NetworkServiceImpl: NetworkService {
@@ -22,19 +22,20 @@ struct NetworkServiceImpl: NetworkService {
     
     private let sharedSession = URLSession.shared
     
-    func getWeather(for city: String, completion: @escaping (Result<Weather, Error>) -> Void) {
+    func getWeather(for city: String, completion: @escaping (Weather?) -> Void) {
         guard let request = getWeatherRequest(for: city) else {
-            
             // Если город не найден, то дальше не пойдет.
             return
         }
         switch request {
         case .failure(let error):
-            completion(.failure(error))
+            completion(nil)
+            print(error.localizedDescription)
         case .success(let request):
             let dataTask = sharedSession.dataTask(with: request) { (data, response, error) in
                 if let error = error {
-                    completion(.failure(error))
+                    completion(nil)
+                    print(error.localizedDescription)
                     return
                 }
                 
@@ -43,14 +44,14 @@ struct NetworkServiceImpl: NetworkService {
                 }
                 
                 guard let data = data else {
+                    completion(nil)
                     print("no data received")
-                    completion(.failure(URLError(.dataNotAllowed)))
                     return
                 }
                 
                 let decoder = JSONDecoder()
-                if let weather = try? decoder.decode(Weather.self, from: data)   {
-                    completion(.success(weather))
+                if let weather = try? decoder.decode(Weather.self, from: data) {
+                    completion(weather)
                 }
             }
             dataTask.resume()
