@@ -22,29 +22,25 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         title = "Погода"
         view.backgroundColor = .systemGroupedBackground
-        reloadData(qos: .userInteractive)
+        reloadCities(qos: .userInteractive)
         view.addSubview(tableView)
-        configureTableView()
-        configureSearchBar()
+        configuringTableView()
+        configuringSearchBar()
         setTableViewConstraints()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        reloadData(qos: .background)
     }
     
     // MARK: UI
 
-    private func configureTableView() {
+    private func configuringTableView() {
         tableView.register(MainTableViewCell.self, forCellReuseIdentifier: MainTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
     }
     
-    private func configureSearchBar() {
+    private func configuringSearchBar() {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
+        searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.delegate = self
         searchController.searchBar.placeholder = "Найти"
     }
@@ -59,15 +55,15 @@ class MainViewController: UIViewController {
         ])
     }
 
-    // Обновить все города с настраиваемым приоритетом для очереди
-    private func reloadData(qos: DispatchQoS.QoSClass) {
+    // Обновляет все города с настраиваемым приоритетом для очереди
+    private func reloadCities(qos: DispatchQoS.QoSClass) {
         DispatchQueue.global(qos: qos).async { [weak self] in
             guard let self = self else { return }
             self.updateAllCities()
         }
     }
     
-    // Обновить все города
+    // Обновляет все города
     private func updateAllCities() {
         cities.list.forEach { [weak self] city in
             guard let self = self else { return }
@@ -83,7 +79,7 @@ class MainViewController: UIViewController {
         }
     }
     
-    // Обновить добавленный город
+    // Обновляет добавленный город
     private func updateNewCity() {
         if let city = cities.list.last {
             networkService.getWeather(for: city) { weather in
@@ -100,7 +96,7 @@ class MainViewController: UIViewController {
     
     // MARK: Actions
     
-    // Показать погоду для поискового запроса
+    // Показывает погоду для поискового запроса
     private func showDetailWeatherFor(city: String) {
         networkService.getWeather(for: city) { [detailVC, searchController] weather in
             if let weather = weather {

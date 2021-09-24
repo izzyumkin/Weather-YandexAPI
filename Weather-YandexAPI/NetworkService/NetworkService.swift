@@ -97,7 +97,7 @@ struct NetworkServiceImpl: NetworkService {
         }
     }
     
-    // Получаем коордианты города
+    // Получаем координаты города
     private func getCoordinatesOfCity(_ city: String, completion: @escaping (Result<CLLocationCoordinate2D, CLError>) -> Void) {
         CLGeocoder().geocodeAddressString(city) { (placemarks, error) in
             if let coordinates = placemarks?.first?.location?.coordinate {

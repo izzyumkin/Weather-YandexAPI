@@ -8,40 +8,38 @@
 import Foundation
 
 protocol WeatherModel {
-    var additionalInformationsDesctiption: [String] { get }
-    func setupAdditionalInformation(weather: Weather) -> [String]
-    func setConditionDescription(condition: String) -> String
-    func setWindDirection(windDirection: String) -> String
+    var namesOfAdditionalInformation: [String] { get }
+    func configuringAdditionalInformationValues(weather: Weather) -> [String]
+    func localizationOfWeatherConditions(condition: String) -> String
+    func localizationOfTheWindDirection(windDirection: String) -> String
 }
 
-class WeatherModelImpl {
+class WeatherModelImpl: WeatherModel {
     
-    // Список названий парраметров для дополнительной информации инормации
-    let additionalInformationsDesctiption: [String] = ["ВОСХОД СОЛНЦА",
-                                                       "ЗАХОД СОЛНЦА",
-                                                       "ОЩУЩАЕТСЯ КАК",
-                                                       "ВЛАЖНОСТЬ",
-                                                       "ВЕТЕР",
-                                                       "ДАВЛЕНИЕ"]
+    // Список названий параметров для дополнительной информации
+    let namesOfAdditionalInformation: [String] = ["ВОСХОД СОЛНЦА",
+                                                  "ЗАХОД СОЛНЦА",
+                                                  "ОЩУЩАЕТСЯ КАК",
+                                                  "ВЛАЖНОСТЬ",
+                                                  "ВЕТЕР",
+                                                  "ДАВЛЕНИЕ"]
     
-    // Список значений парраметров для дополнительной информации инормации
-    func setupAdditionalInformation(weather: Weather) -> [String] {
-        
+    // Список значений параметров для дополнительной информации
+    func configuringAdditionalInformationValues(weather: Weather) -> [String] {
         var result: [String] = []
         if let day = weather.forecasts.first {
             result.append("\(day.sunrise)")
             result.append("\(day.sunset)")
             result.append(weather.fact.feelsLike > 0 ? "+\(weather.fact.feelsLike)°C" : "\(weather.fact.feelsLike)°C")
             result.append("\(weather.fact.humidity)")
-            result.append("\(setWindDirection(windDirection: weather.fact.windDirection)) \(weather.fact.windSpeed) м/с")
+            result.append("\(localizationOfTheWindDirection(windDirection: weather.fact.windDirection)) \(weather.fact.windSpeed) м/с")
             result.append("\(weather.fact.pressure) мм рт. ст.")
         }
-        
         return result
     }
     
     // Локализация погодных условий
-    func setConditionDescription(condition: String) -> String {
+    func localizationOfWeatherConditions(condition: String) -> String {
         switch condition {
         case "clear":
             return "Ясно"
@@ -87,7 +85,7 @@ class WeatherModelImpl {
     }
     
     // Локализация направления ветра
-    func setWindDirection(windDirection: String) -> String {
+    func localizationOfTheWindDirection(windDirection: String) -> String {
         switch windDirection {
         case "nw":
             return "Северо-западный"
@@ -102,7 +100,7 @@ class WeatherModelImpl {
         case "s":
             return "Южный"
         case "sw":
-            return "Юго заподный"
+            return "Юго-заподный"
         case "w":
             return "Заподный"
         case "с":

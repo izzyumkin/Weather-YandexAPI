@@ -14,7 +14,7 @@ class HeaderTableViewCell: UITableViewCell {
         return String(describing: self)
     }
     
-    public var weatherModel: WeatherModelImpl?
+    public var weatherModel: WeatherModel?
     
     private var nameLabel = UILabel()
     private var conditionLabel = UILabel()
@@ -30,10 +30,10 @@ class HeaderTableViewCell: UITableViewCell {
         contentView.addSubview(tempLabel)
         contentView.addSubview(minMaxLabel)
         
-        configureNameLabel()
-        configureConditionLabel()
-        configureTempLabel()
-        configureMinMaxLabel()
+        configuringNameLabel()
+        configuringConditionLabel()
+        configuringTempLabel()
+        configuringMinMaxLabel()
         
         setNameLabelConstraints()
         setConditionLabelConstraints()
@@ -46,28 +46,28 @@ class HeaderTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configureNameLabel() {
+    private func configuringNameLabel() {
         nameLabel.font = UIFont.roundedFont(ofSize: 30, weight: .medium)
         nameLabel.textColor = .label
         nameLabel.textAlignment = .center
         nameLabel.text = "Загрузка..."
     }
     
-    private func configureConditionLabel() {
+    private func configuringConditionLabel() {
         conditionLabel.font = UIFont.roundedFont(ofSize: 20, weight: .medium)
         conditionLabel.textColor = .label
         conditionLabel.textAlignment = .center
         conditionLabel.text = "Загрузка..."
     }
     
-    private func configureTempLabel() {
+    private func configuringTempLabel() {
         tempLabel.font = UIFont.roundedFont(ofSize: 40, weight: .medium)
         tempLabel.textColor = .label
         tempLabel.textAlignment = .center
         tempLabel.text = "0°C"
     }
     
-    private func configureMinMaxLabel() {
+    private func configuringMinMaxLabel() {
         minMaxLabel.font = UIFont.roundedFont(ofSize: 20, weight: .medium)
         minMaxLabel.textColor = .label
         minMaxLabel.textAlignment = .center
@@ -120,7 +120,7 @@ class HeaderTableViewCell: UITableViewCell {
     public func set(city: String?, weather: Weather?) {
         if let city = city, let weather = weather {
             nameLabel.text = city
-            conditionLabel.text = weatherModel?.setConditionDescription(condition: weather.fact.condition)
+            conditionLabel.text = weatherModel?.localizationOfWeatherConditions(condition: weather.fact.condition)
             let temp = weather.fact.temp
             tempLabel.text = temp > 0 ? "+\(temp)°C" : "\(temp)°C"
             if let tempMin = weather.forecasts.first?.parts.evening.tempMin, let tempMax = weather.forecasts.first?.parts.day.tempMax {

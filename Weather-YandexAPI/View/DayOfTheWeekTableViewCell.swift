@@ -25,9 +25,9 @@ class DayOfTheWeekTableViewCell: UITableViewCell {
         contentView.addSubview(minTempLabel)
         contentView.addSubview(maxTempLabel)
         
-        configureNameLabel()
-        configureMinTempLabel()
-        configureMaxTempLabel()
+        configuringNameLabel()
+        configuringMinTempLabel()
+        configuringMaxTempLabel()
         
         setNameLabelConstraints()
         setWeatherConditionImageView()
@@ -39,18 +39,18 @@ class DayOfTheWeekTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configureNameLabel() {
+    private func configuringNameLabel() {
         nameLabel.font = UIFont.roundedFont(ofSize: 16, weight: .regular)
         nameLabel.textColor = .label
     }
     
-    private func configureMinTempLabel() {
+    private func configuringMinTempLabel() {
         minTempLabel.font = UIFont.roundedFont(ofSize: 16, weight: .regular)
         minTempLabel.textColor = .lightGray
         minTempLabel.textAlignment = .right
     }
     
-    private func configureMaxTempLabel() {
+    private func configuringMaxTempLabel() {
         maxTempLabel.font = UIFont.roundedFont(ofSize: 16, weight: .regular)
         maxTempLabel.textColor = .label
         maxTempLabel.textAlignment = .right

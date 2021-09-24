@@ -31,31 +31,36 @@ class MainTableViewCell: UITableViewCell {
     private var nameLabel = UILabel()
     private var tempLabel = UILabel()
     private var weatherConditionImageView = UIImageView()
+    private var activityIndicator = UIActivityIndicatorView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(nameLabel)
         addSubview(tempLabel)
         addSubview(weatherConditionImageView)
+        addSubview(activityIndicator)
         
-        configureNameLabel()
-        configureTempLabel()
+        activityIndicator.startAnimating()
+        
+        configuringNameLabel()
+        configuringTempLabel()
         
         setNameLabelConstraints()
         setTempLabelConstraints()
         setWeatherConditionImageViewConstraints()
+        setActivityIndicatorConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configureNameLabel() {
+    private func configuringNameLabel() {
         nameLabel.font = UIFont.roundedFont(ofSize: 20, weight: .medium)
         nameLabel.textColor = .label
     }
     
-    private func configureTempLabel() {
+    private func configuringTempLabel() {
         tempLabel.font = UIFont.roundedFont(ofSize: 30, weight: .medium)
         tempLabel.textColor = .label
         tempLabel.textAlignment = .right
@@ -88,6 +93,16 @@ class MainTableViewCell: UITableViewCell {
         ])
     }
     
+    private func setActivityIndicatorConstraints() {
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            activityIndicator.widthAnchor.constraint(equalToConstant: 40),
+            activityIndicator.heightAnchor.constraint(equalToConstant: 40),
+            activityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
+            activityIndicator.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16)
+        ])
+    }
+    
     public func set(city: String) {
         nameLabel.text = city
         
@@ -97,7 +112,9 @@ class MainTableViewCell: UITableViewCell {
         tempLabel.text = temp > 0 ? "+\(temp)°С" : "\(temp)°С"
         
         if let url = URL(string: "https://yastatic.net/weather/i/icons/blueye/color/svg/\(weather.fact.icon).svg") {
-            weatherConditionImageView.sd_setImage(with: url, completed: nil)
+            weatherConditionImageView.sd_setImage(with: url) { _, _, _, _ in
+                self.activityIndicator.stopAnimating()
+            }
         }
     }
     

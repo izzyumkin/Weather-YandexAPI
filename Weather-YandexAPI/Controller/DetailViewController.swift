@@ -13,7 +13,7 @@ class DetailViewController: UIViewController {
     private var tableView = UITableView(frame: CGRect.zero, style: .plain)
     
     // Data
-    private let weatherModel: WeatherModelImpl = WeatherModelImpl()
+    private let weatherModel: WeatherModel = WeatherModelImpl()
     private let networkService: NetworkService = NetworkServiceImpl()
     private var additionalInformationsValue: [String] = []
     private var cities = CitiesImpl.shared
@@ -26,7 +26,7 @@ class DetailViewController: UIViewController {
     public var weather: Weather? {
         didSet {
             guard let weather = weather else { return }
-            additionalInformationsValue = weatherModel.setupAdditionalInformation(weather: weather)
+            additionalInformationsValue = weatherModel.configuringAdditionalInformationValues(weather: weather)
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.tableView.reloadData()
@@ -39,12 +39,12 @@ class DetailViewController: UIViewController {
         view.backgroundColor = .systemGroupedBackground
         view.addSubview(tableView)
         
-        configureTableView()
+        configuringTableView()
         setTableViewConstraints()
     }
     
     // MARK: UI
-    private func configureTableView() {
+    private func configuringTableView() {
         tableView.register(HeaderTableViewCell.self, forCellReuseIdentifier: HeaderTableViewCell.identifier)
         tableView.register(DayOfTheWeekTableViewCell.self, forCellReuseIdentifier: DayOfTheWeekTableViewCell.identifier)
         tableView.register(AdditionalInformationTableViewCell.self, forCellReuseIdentifier: AdditionalInformationTableViewCell.identifier)
@@ -64,7 +64,7 @@ class DetailViewController: UIViewController {
     
     // MARK: Data
     
-    // Если погода еще не была сохранена, делаем запрос и сохранем, если была - указываем ее
+    // Если погода еще не была сохранена, делаем запрос и сохраняем, если была - указываем ее
     private func setWeather(city: String) {
         if let weather = cities.listWithWeather[city] {
             self.weather = weather
@@ -101,7 +101,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         case 1:
             return 6
         case 2:
-            return weatherModel.additionalInformationsDesctiption.count
+            return weatherModel.namesOfAdditionalInformation.count
         default:
             return 0
         }
@@ -133,7 +133,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
             }
         case 2:
             if let cell = tableView.dequeueReusableCell(withIdentifier: AdditionalInformationTableViewCell.identifier, for: indexPath) as? AdditionalInformationTableViewCell {
-                let description = weatherModel.additionalInformationsDesctiption[indexPath.row]
+                let description = weatherModel.namesOfAdditionalInformation[indexPath.row]
                 var value = ""
                 if !additionalInformationsValue.isEmpty {
                     value = additionalInformationsValue[indexPath.row]

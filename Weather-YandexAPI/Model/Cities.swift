@@ -8,14 +8,12 @@
 import Foundation
 
 protocol Cities {
-    
     var list: [String] { get }
     var listWithWeather: [String: Weather] { get }
     var count: Int { get }
     mutating func add(city: String)
     mutating func removeCity(at index: Int)
     mutating func addWeatherFor(city: String, weather: Weather)
-    
 }
 
 final class CitiesImpl: Cities {

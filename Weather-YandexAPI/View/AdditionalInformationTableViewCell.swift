@@ -22,9 +22,9 @@ class AdditionalInformationTableViewCell: UITableViewCell {
         
         contentView.addSubview(stackView)
         
-        configureDescriptionLabel()
-        configureValueLabel()
-        configureStackView()
+        configuringDescriptionLabel()
+        configuringValueLabel()
+        configuringStackView()
         
         setStackViewConstraints()
     }
@@ -33,17 +33,17 @@ class AdditionalInformationTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configureDescriptionLabel() {
+    private func configuringDescriptionLabel() {
         descriptionLabel.font = UIFont.roundedFont(ofSize: 12, weight: .regular)
         descriptionLabel.textColor = .lightGray
     }
     
-    private func configureValueLabel() {
+    private func configuringValueLabel() {
         valueLabel.font = UIFont.roundedFont(ofSize: 20, weight: .medium)
         valueLabel.textColor = .label
     }
     
-    private func configureStackView() {
+    private func configuringStackView() {
         
         stackView.axis = .vertical
         stackView.distribution = .fillProportionally
