@@ -8,7 +8,6 @@
 import Foundation
 
 extension Date {
-    
     static var dyaNameFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE"
@@ -25,5 +24,4 @@ extension Date {
         }
         return resultArray
     }
-
 }

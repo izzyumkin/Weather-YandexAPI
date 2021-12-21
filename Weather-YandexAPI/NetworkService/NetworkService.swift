@@ -12,19 +12,22 @@ protocol NetworkService {
     func getWeather(for city: String, completion: @escaping (Weather?) -> Void)
 }
 
-struct NetworkServiceImpl: NetworkService {
+final class NetworkServiceImpl: NetworkService {
     
-    // Константы
+    // MARK: - Private Properties
+    
     private let scheme = "https"
     private let host = "api.weather.yandex.ru"
     private let path = "/v2/forecast"
     private let headerForKey = "X-Yandex-API-Key"
     private let apiKey = "342d1541-a1f3-4f08-8938-f145f78d5c3b"
-    
+
     private let sharedSession = URLSession.shared
     
+    // MARK: - Public Methods
+    
     // Обработка запроса
-    func getWeather(for city: String, completion: @escaping (Weather?) -> Void) {
+    public func getWeather(for city: String, completion: @escaping (Weather?) -> Void) {
         guard let request = getWeatherRequest(for: city) else {
             // Если город не найден, выходим из метода
             return
@@ -57,6 +60,8 @@ struct NetworkServiceImpl: NetworkService {
         }
     }
     
+    // MARK: - Private Methods
+    
     // Создаем тело запроса
     private func getWeatherRequest(for city: String) -> Result<URLRequest, CLError>? {
         var locationCoordinate: Result<CLLocationCoordinate2D, CLError>?
@@ -72,8 +77,8 @@ struct NetworkServiceImpl: NetworkService {
             }
             group.leave()
         }
-        
         group.wait()
+        
         guard let coordinate = locationCoordinate else { return nil }
         switch coordinate {
         case .failure(let error):
@@ -107,5 +112,4 @@ struct NetworkServiceImpl: NetworkService {
             }
         }
     }
-    
 }

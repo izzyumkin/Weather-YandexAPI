@@ -7,29 +7,51 @@
 
 import UIKit
 
-class MainViewController: UIViewController {
+final class MainViewController: UIViewController {
     
-    // UI
-    private var tableView = UITableView(frame: CGRect.zero, style: .plain)
-    private lazy var searchController = UISearchController(searchResultsController: nil)
+    // MARK: - Private Properties
+    
+    private let tableView = UITableView(frame: CGRect.zero, style: .plain)
+    private let networkService: NetworkService = NetworkServiceImpl()
     private let detailVC = DetailViewController()
     
-    // Data
+    private lazy var searchController = UISearchController(searchResultsController: nil)
     private var cities = CitiesImpl.shared
-    private let networkService: NetworkService = NetworkServiceImpl()
+    
+    // MARK: - Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Погода"
         view.backgroundColor = .systemGroupedBackground
+        
         reloadCities(qos: .userInteractive)
-        view.addSubview(tableView)
         configuringTableView()
         configuringSearchBar()
         setTableViewConstraints()
     }
     
-    // MARK: UI
+    // MARK: - Actions
+    
+    // Закрыть DetailVC
+    @objc private func hideDetailVC() {
+        detailVC.dismiss(animated: true, completion: nil)
+    }
+    
+    // Добавить новый город и обновить таблицу
+    @objc private func addSearchedCity() {
+        if let searchedCity = searchController.searchBar.text?.capitalized {
+            searchController.isActive = false
+            detailVC.dismiss(animated: true, completion: nil)
+            cities.add(city: searchedCity)
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                guard let self = self else { return }
+                self.updateNewCity()
+            }
+        }
+    }
+    
+    // MARK: - Private Methods
 
     private func configuringTableView() {
         tableView.register(MainTableViewCell.self, forCellReuseIdentifier: MainTableViewCell.identifier)
@@ -47,6 +69,8 @@ class MainViewController: UIViewController {
     
     private func setTableViewConstraints() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(tableView)
+        
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -94,8 +118,6 @@ class MainViewController: UIViewController {
         }
     }
     
-    // MARK: Actions
-    
     // Показывает погоду для поискового запроса
     private func showDetailWeatherFor(city: String) {
         networkService.getWeather(for: city) { [detailVC, searchController] weather in
@@ -117,36 +139,17 @@ class MainViewController: UIViewController {
                 // Город не найден
                 DispatchQueue.main.async {
                     searchController.searchBar.isLoading = false
-                    UIAlertController.showUknownLocation()
+                    UIAlertController.showUnknownLocation()
                 }
             }
         }
         
     }
-    
-    // Закрыть DetailVC
-    @objc private func hideDetailVC() {
-        detailVC.dismiss(animated: true, completion: nil)
-    }
-    
-    // Добавить новый город и обновить таблицу
-    @objc private func addSearchedCity() {
-        if let searchedCity = searchController.searchBar.text?.capitalized {
-            searchController.isActive = false
-            detailVC.dismiss(animated: true, completion: nil)
-            cities.add(city: searchedCity)
-            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                guard let self = self else { return }
-                self.updateNewCity()
-            }
-        }
-    }
-
 }
 
-// MARK: UITableViewDelegate, UITableViewDataSource
-extension MainViewController: UITableViewDelegate, UITableViewDataSource {
-    
+// MARK: - Extension UITableViewDataSource
+
+extension MainViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cities.count
     }
@@ -162,7 +165,11 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         }
         return UITableViewCell()
     }
-    
+}
+
+// MARK: - Extension UITableViewDelegate
+
+extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 52
     }
@@ -186,10 +193,10 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         configuration.performsFirstActionWithFullSwipe = true
         return configuration
     }
-    
 }
 
-// MARK: UISearchBarDelegate
+// MARK: - Extension UISearchBarDelegate
+
 extension MainViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

@@ -7,22 +7,17 @@
 
 import UIKit
 
-class DetailViewController: UIViewController {
+final class DetailViewController: UIViewController {
     
-    // UI
-    private var tableView = UITableView(frame: CGRect.zero, style: .plain)
+    // MARK: - Public Properties
     
-    // Data
-    private let weatherModel: WeatherModel = WeatherModelImpl()
-    private let networkService: NetworkService = NetworkServiceImpl()
-    private var additionalInformationsValue: [String] = []
-    private var cities = CitiesImpl.shared
     public var city: String? {
         didSet {
             guard let city = city else { return }
             setWeather(city: city)
         }
     }
+    
     public var weather: Weather? {
         didSet {
             guard let weather = weather else { return }
@@ -34,6 +29,17 @@ class DetailViewController: UIViewController {
         }
     }
     
+    // MARK: - Private Properties
+    
+    private let tableView = UITableView(frame: CGRect.zero, style: .plain)
+    private let weatherModel: WeatherModel = WeatherModelImpl()
+    private let networkService: NetworkService = NetworkServiceImpl()
+    
+    private var additionalInformationsValue: [String] = []
+    private var cities = CitiesImpl.shared
+    
+    // MARK: - Life cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGroupedBackground
@@ -43,7 +49,8 @@ class DetailViewController: UIViewController {
         setTableViewConstraints()
     }
     
-    // MARK: UI
+    // MARK: - Private Methods
+    
     private func configuringTableView() {
         tableView.register(HeaderTableViewCell.self, forCellReuseIdentifier: HeaderTableViewCell.identifier)
         tableView.register(DayOfTheWeekTableViewCell.self, forCellReuseIdentifier: DayOfTheWeekTableViewCell.identifier)
@@ -62,8 +69,6 @@ class DetailViewController: UIViewController {
         ])
     }
     
-    // MARK: Data
-    
     // Если погода еще не была сохранена, делаем запрос и сохраняем, если была - указываем ее
     private func setWeather(city: String) {
         if let weather = cities.listWithWeather[city] {
@@ -73,8 +78,7 @@ class DetailViewController: UIViewController {
                 guard let self = self else { return }
                 self.networkService.getWeather(for: city) { weather in
                     if let weather = weather {
-                        DispatchQueue.main.async { [weak self] in
-                            guard let self = self else { return }
+                        DispatchQueue.main.async {
                             self.weather = weather
                         }
                     }
@@ -82,13 +86,11 @@ class DetailViewController: UIViewController {
             }
         }
     }
-    
-
-    
 }
 
-// MARK: UITableViewDelegate, UITableViewDataSource
-extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
+// MARK: - Extension UITableViewDataSource
+
+extension DetailViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 3
@@ -108,11 +110,10 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         switch indexPath.section {
         case 0:
             if let cell = tableView.dequeueReusableCell(withIdentifier: HeaderTableViewCell.identifier, for: indexPath) as? HeaderTableViewCell {
-                cell.set(city: city, weather: weather)
+                cell.setupData(city: city, weather: weather)
                 cell.weatherModel = weatherModel
                 return cell
             } else {
@@ -125,7 +126,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
                 if let icon = weather?.forecasts[indexPath.row + 1].parts.day.icon,
                    let minTemp = weather?.forecasts[indexPath.row + 1].parts.evening.tempMin,
                    let maxTemp = weather?.forecasts[indexPath.row + 1].parts.day.tempMax {
-                    cell.set(dayName: dayName, icon: icon, minTemp: minTemp, maxTemp: maxTemp)
+                    cell.setupData(dayName: dayName, icon: icon, minTemp: minTemp, maxTemp: maxTemp)
                 }
                 return cell
             } else {
@@ -138,7 +139,7 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
                 if !additionalInformationsValue.isEmpty {
                     value = additionalInformationsValue[indexPath.row]
                 }
-                cell.set(description: description, value: value)
+                cell.setupData(description: description, value: value)
                 return cell
             } else {
                 return UITableViewCell()
@@ -146,9 +147,12 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
         default:
             return UITableViewCell()
         }
-        
     }
-    
+}
+
+// MARK: - Extension UITableViewDelegate
+
+extension DetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             return 293
@@ -156,5 +160,4 @@ extension DetailViewController: UITableViewDelegate, UITableViewDataSource {
             return 52
         }
     }
-    
 }

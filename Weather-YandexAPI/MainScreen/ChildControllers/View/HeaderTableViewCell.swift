@@ -5,36 +5,56 @@
 //  Created by Иван Изюмкин on 18.09.2021.
 //
 
-import UIKit
 import SDWebImageSVGCoder
+import UIKit
 
-class HeaderTableViewCell: UITableViewCell {
-
-    public class var identifier: String {
-        return String(describing: self)
-    }
+final class HeaderTableViewCell: UITableViewCell {
+    
+    // MARK: - Public Properties
     
     public var weatherModel: WeatherModel?
     
-    private var nameLabel = UILabel()
-    private var conditionLabel = UILabel()
-    private var tempLabel = UILabel()
-    private var minMaxLabel = UILabel()
-    private var weatherConditionImageView = UIImageView()
+    // MARK: - Private Properties
+    
+    private let nameLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.roundedFont(ofSize: 30, weight: .medium)
+        label.textColor = .label
+        label.textAlignment = .center
+        label.text = "Загрузка..."
+        return label
+    }()
+    private let conditionLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.roundedFont(ofSize: 20, weight: .medium)
+        label.textColor = .label
+        label.textAlignment = .center
+        label.text = "Загрузка..."
+        return label
+    }()
+    private let tempLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.roundedFont(ofSize: 40, weight: .medium)
+        label.textColor = .label
+        label.textAlignment = .center
+        label.text = "0°C"
+        return label
+    }()
+    private let minMaxLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.roundedFont(ofSize: 20, weight: .medium)
+        label.textColor = .label
+        label.textAlignment = .center
+        label.text = "Мин: 0°C  Макс: 0°C"
+        return label
+    }()
+    private let weatherConditionImageView = UIImageView()
+    
+    // MARK: - Initializers
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(weatherConditionImageView)
-        contentView.addSubview(nameLabel)
-        contentView.addSubview(conditionLabel)
-        contentView.addSubview(tempLabel)
-        contentView.addSubview(minMaxLabel)
-        
-        configuringNameLabel()
-        configuringConditionLabel()
-        configuringTempLabel()
-        configuringMinMaxLabel()
-        
+        addSubviews()
         setNameLabelConstraints()
         setConditionLabelConstraints()
         setTempLabelConstraints()
@@ -46,32 +66,32 @@ class HeaderTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configuringNameLabel() {
-        nameLabel.font = UIFont.roundedFont(ofSize: 30, weight: .medium)
-        nameLabel.textColor = .label
-        nameLabel.textAlignment = .center
-        nameLabel.text = "Загрузка..."
+    // MARK: - Public Methods
+    
+    public func setupData(city: String?, weather: Weather?) {
+        if let city = city, let weather = weather {
+            nameLabel.text = city
+            conditionLabel.text = weatherModel?.localizationOfWeatherConditions(condition: weather.fact.condition)
+            let temp = weather.fact.temp
+            tempLabel.text = temp > 0 ? "+\(temp)°C" : "\(temp)°C"
+            if let tempMin = weather.forecasts.first?.parts.evening.tempMin, let tempMax = weather.forecasts.first?.parts.day.tempMax {
+                minMaxLabel.text = tempMin > 0 ? "Мин: +\(tempMin)  " : "Мин: \(tempMin)  "
+                minMaxLabel.text! += tempMax > 0 ? "Макс: +\(tempMax)" : "Макс: \(tempMax)"
+            }
+            if let url = URL(string: "https://yastatic.net/weather/i/icons/blueye/color/svg/\(weather.fact.icon).svg") {
+                weatherConditionImageView.sd_setImage(with: url, completed: nil)
+            }
+        }
     }
     
-    private func configuringConditionLabel() {
-        conditionLabel.font = UIFont.roundedFont(ofSize: 20, weight: .medium)
-        conditionLabel.textColor = .label
-        conditionLabel.textAlignment = .center
-        conditionLabel.text = "Загрузка..."
-    }
+    // MARK: - Private Methods
     
-    private func configuringTempLabel() {
-        tempLabel.font = UIFont.roundedFont(ofSize: 40, weight: .medium)
-        tempLabel.textColor = .label
-        tempLabel.textAlignment = .center
-        tempLabel.text = "0°C"
-    }
-    
-    private func configuringMinMaxLabel() {
-        minMaxLabel.font = UIFont.roundedFont(ofSize: 20, weight: .medium)
-        minMaxLabel.textColor = .label
-        minMaxLabel.textAlignment = .center
-        minMaxLabel.text = "Мин: 0°C  Макс: 0°C"
+    private func addSubviews() {
+        contentView.addSubview(weatherConditionImageView)
+        contentView.addSubview(nameLabel)
+        contentView.addSubview(conditionLabel)
+        contentView.addSubview(tempLabel)
+        contentView.addSubview(minMaxLabel)
     }
     
     private func setNameLabelConstraints() {
@@ -115,21 +135,5 @@ class HeaderTableViewCell: UITableViewCell {
             minMaxLabel.topAnchor.constraint(equalTo: tempLabel.bottomAnchor, constant: 10),
             minMaxLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
-    }
-    
-    public func set(city: String?, weather: Weather?) {
-        if let city = city, let weather = weather {
-            nameLabel.text = city
-            conditionLabel.text = weatherModel?.localizationOfWeatherConditions(condition: weather.fact.condition)
-            let temp = weather.fact.temp
-            tempLabel.text = temp > 0 ? "+\(temp)°C" : "\(temp)°C"
-            if let tempMin = weather.forecasts.first?.parts.evening.tempMin, let tempMax = weather.forecasts.first?.parts.day.tempMax {
-                minMaxLabel.text = tempMin > 0 ? "Мин: +\(tempMin)  " : "Мин: \(tempMin)  "
-                minMaxLabel.text! += tempMax > 0 ? "Макс: +\(tempMax)" : "Макс: \(tempMax)"
-            }
-            if let url = URL(string: "https://yastatic.net/weather/i/icons/blueye/color/svg/\(weather.fact.icon).svg") {
-                weatherConditionImageView.sd_setImage(with: url, completed: nil)
-            }
-        }
     }
 }

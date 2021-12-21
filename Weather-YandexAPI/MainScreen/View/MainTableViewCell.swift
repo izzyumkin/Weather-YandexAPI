@@ -8,43 +8,51 @@
 import UIKit
 import SDWebImageSVGCoder
 
-class MainTableViewCell: UITableViewCell {
+final class MainTableViewCell: UITableViewCell {
     
-    public class var identifier: String {
-        return String(describing: self)
-    }
+    // MARK: - Public Properties
     
     public var city: String? {
         didSet {
             guard let city = city else { return }
-            set(city: city)
+            setupData(city: city)
         }
     }
     
     public var weather: Weather? {
         didSet {
             guard let city = city else { return }
-            set(city: city)
+            setupData(city: city)
         }
     }
     
-    private var nameLabel = UILabel()
-    private var tempLabel = UILabel()
-    private var weatherConditionImageView = UIImageView()
-    private var activityIndicator = UIActivityIndicatorView()
+    // MARK: - Private Properties
+    
+    private let nameLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.roundedFont(ofSize: 20, weight: .medium)
+        label.textColor = .label
+        return label
+    }()
+    private var tempLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.roundedFont(ofSize: 30, weight: .medium)
+        label.textColor = .label
+        label.textAlignment = .right
+        return label
+    }()
+    private let weatherConditionImageView = UIImageView()
+    private let activityIndicator = UIActivityIndicatorView()
+    
+    // MARK: - Initializers
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubview(nameLabel)
-        addSubview(tempLabel)
-        addSubview(weatherConditionImageView)
-        addSubview(activityIndicator)
-        
         activityIndicator.startAnimating()
         
-        configuringNameLabel()
-        configuringTempLabel()
-        
+        addSubviews()
         setNameLabelConstraints()
         setTempLabelConstraints()
         setWeatherConditionImageViewConstraints()
@@ -55,19 +63,31 @@ class MainTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configuringNameLabel() {
-        nameLabel.font = UIFont.roundedFont(ofSize: 20, weight: .medium)
-        nameLabel.textColor = .label
+    // MARK: - Private Methods
+    
+    private func setupData(city: String) {
+        nameLabel.text = city
+        
+        // Настраиваем погоду:
+        guard let weather = weather else { return }
+        let temp = weather.fact.temp
+        tempLabel.text = temp > 0 ? "+\(temp)°С" : "\(temp)°С"
+        
+        if let url = URL(string: "https://yastatic.net/weather/i/icons/blueye/color/svg/\(weather.fact.icon).svg") {
+            weatherConditionImageView.sd_setImage(with: url) { _, _, _, _ in
+                self.activityIndicator.stopAnimating()
+            }
+        }
     }
     
-    private func configuringTempLabel() {
-        tempLabel.font = UIFont.roundedFont(ofSize: 30, weight: .medium)
-        tempLabel.textColor = .label
-        tempLabel.textAlignment = .right
+    private func addSubviews() {
+        contentView.addSubview(nameLabel)
+        contentView.addSubview(tempLabel)
+        contentView.addSubview(weatherConditionImageView)
+        contentView.addSubview(activityIndicator)
     }
     
     private func setNameLabelConstraints() {
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             nameLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -76,7 +96,6 @@ class MainTableViewCell: UITableViewCell {
     }
     
     private func setTempLabelConstraints() {
-        tempLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             tempLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             tempLabel.trailingAnchor.constraint(equalTo: weatherConditionImageView.leadingAnchor, constant: -10)
@@ -102,20 +121,4 @@ class MainTableViewCell: UITableViewCell {
             activityIndicator.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])
     }
-    
-    public func set(city: String) {
-        nameLabel.text = city
-        
-        // Настраиваем погоду:
-        guard let weather = weather else { return }
-        let temp = weather.fact.temp
-        tempLabel.text = temp > 0 ? "+\(temp)°С" : "\(temp)°С"
-        
-        if let url = URL(string: "https://yastatic.net/weather/i/icons/blueye/color/svg/\(weather.fact.icon).svg") {
-            weatherConditionImageView.sd_setImage(with: url) { _, _, _, _ in
-                self.activityIndicator.stopAnimating()
-            }
-        }
-    }
-    
 }

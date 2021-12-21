@@ -14,7 +14,9 @@ protocol WeatherModel {
     func localizationOfTheWindDirection(windDirection: String) -> String
 }
 
-class WeatherModelImpl: WeatherModel {
+final class WeatherModelImpl: WeatherModel {
+    
+    // MARK: - Public Properties
     
     // Список названий параметров для дополнительной информации
     let namesOfAdditionalInformation: [String] = ["ВОСХОД СОЛНЦА",
@@ -24,8 +26,10 @@ class WeatherModelImpl: WeatherModel {
                                                   "ВЕТЕР",
                                                   "ДАВЛЕНИЕ"]
     
+    // MARK: - Public Methods
+    
     // Список значений параметров для дополнительной информации
-    func configuringAdditionalInformationValues(weather: Weather) -> [String] {
+    public func configuringAdditionalInformationValues(weather: Weather) -> [String] {
         var result: [String] = []
         if let day = weather.forecasts.first {
             result.append("\(day.sunrise)")
@@ -39,7 +43,7 @@ class WeatherModelImpl: WeatherModel {
     }
     
     // Локализация погодных условий
-    func localizationOfWeatherConditions(condition: String) -> String {
+    public func localizationOfWeatherConditions(condition: String) -> String {
         switch condition {
         case "clear":
             return "Ясно"
@@ -85,7 +89,7 @@ class WeatherModelImpl: WeatherModel {
     }
     
     // Локализация направления ветра
-    func localizationOfTheWindDirection(windDirection: String) -> String {
+    public func localizationOfTheWindDirection(windDirection: String) -> String {
         switch windDirection {
         case "nw":
             return "Северо-западный"
@@ -109,5 +113,4 @@ class WeatherModelImpl: WeatherModel {
             return ""
         }
     }
-    
 }

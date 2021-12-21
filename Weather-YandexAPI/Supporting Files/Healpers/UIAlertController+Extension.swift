@@ -8,8 +8,7 @@
 import UIKit
 
 extension UIAlertController {
-    
-    static func showUknownLocation() {
+    static func showUnknownLocation() {
         DispatchQueue.main.async {
             guard let navigationController = UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.rootViewController as? UINavigationController else { return }
 
@@ -18,5 +17,4 @@ extension UIAlertController {
                 navigationController.present(alert, animated: true)
         }
     }
-    
 }
